@@ -369,6 +369,10 @@ public class CONFIGURACAO extends javax.swing.JFrame {
             sucesso = false;
         } else if (CRIA_TABELAS() == false) {
             sucesso = false;
+        } else if (CRIA_PROCEDURES() == false) {
+            sucesso = false;
+        } else if (CRIA_INSERTES() == false) {
+            sucesso = false;
         }
 
         return sucesso;
@@ -404,13 +408,15 @@ public class CONFIGURACAO extends javax.swing.JFrame {
             sucesso = false;
         } else if (CRIA_TABELA_CARRO() == false) {
             sucesso = false;
+        } else if (CRIA_PROCIDURE_COR() == false) {
+            sucesso = false;
         }
         FECHAR_CONEXAO();
         return sucesso;
     }
     //FIM.
 
-    //METODOS DE CRIAÇÃO DE TABELAS
+    //METODOS DE CRIAÇÃO DE TABELA_MOBELO
     private boolean CRIA_TABELA_MODELO() {
         boolean sucesso = false;
         PreparedStatement stm;
@@ -429,7 +435,9 @@ public class CONFIGURACAO extends javax.swing.JFrame {
         }
         return sucesso;
     }
+    //FIM.
 
+    //METODOS DE CRIAÇÃO DE TABELA_COR
     private boolean CRIA_TABELA_COR() {
         boolean sucesso = false;
         PreparedStatement stm;
@@ -448,7 +456,9 @@ public class CONFIGURACAO extends javax.swing.JFrame {
         }
         return sucesso;
     }
+    //FIM.
 
+    //METODOS DE CRIAÇÃO DE TABELA_CARRO
     private boolean CRIA_TABELA_CARRO() {
         boolean sucesso = false;
         PreparedStatement stm;
@@ -474,4 +484,70 @@ public class CONFIGURACAO extends javax.swing.JFrame {
     }
     //FIM.
 
+    //METODO DE CHAMADA DE CRIAÇÃO DE PROCEDURES
+    @SuppressWarnings("empty-statement")
+    private boolean CRIA_PROCEDURES() {
+        boolean sucesso = true;
+
+        CONEXAO_DATABASE(T_Host.getText(), T_Porta.getText(), T_User.getText(), T_Senha.getText());
+        if (CRIA_PROCIDURE_COR() == false) {
+            sucesso = false;
+        };
+        FECHAR_CONEXAO();
+        return sucesso;
+    }
+    //FIM.
+
+    //METODO DE CRIAÇÃO DE PROCEDURES
+    private boolean CRIA_PROCIDURE_COR() {
+        boolean sucesso = false;
+        PreparedStatement stm;
+        String sql = "CREATE PROCEDURE IF NOT EXISTS sp_save_cor ("
+                + "  pdescricao varchar (50)"
+                + "  )"
+                + "  BEGIN"
+                + "  insert into tb_cor (descricao) values (pdescricao);"
+                + "  END";
+        try {
+            stm = CONEXAO.prepareStatement(sql);
+            stm.execute();
+            sucesso = true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", 0);
+        }
+        return sucesso;
+    }
+    //FIM.
+
+    //METODO DE CHAMADA DE CRIAÇÃO DE INSERTES
+    @SuppressWarnings("empty-statement")
+    private boolean CRIA_INSERTES() {
+        boolean sucesso = true;
+
+        CONEXAO_DATABASE(T_Host.getText(), T_Porta.getText(), T_User.getText(), T_Senha.getText());
+        if (CRIA_INSERT_COR() == false) {
+            sucesso = false;
+        };
+        FECHAR_CONEXAO();
+        return sucesso;
+    }
+    //FIM.
+
+    //METODO DE INSERIR DADOS NA TABELA_COR
+    private boolean CRIA_INSERT_COR() {
+        boolean sucesso = false;
+        PreparedStatement stm;
+        String sql = "INSERT INTO tb_cor"
+                + "  (descricao) values "
+                + "  ('branco')";
+        try {
+            stm = CONEXAO.prepareStatement(sql);
+            stm.execute();
+            sucesso = true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", 0);
+        }
+        return sucesso;
+    }
+    //FIM.
 }
